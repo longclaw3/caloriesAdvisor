@@ -1,4 +1,4 @@
-import streamlit as st 
+import streamlit as st
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
@@ -7,34 +7,39 @@ from PIL import Image
 # Load environment variables
 load_dotenv()
 
-# Configure API key
+# Configure Gemini API key
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 # Function to get Gemini AI response
 def get_gemini_response(input_prompt, image):
-    model = genai.GenerativeModel('gemini-1.5-flash')  # ✅ Updated to latest model
-    response = model.generate_content([input_prompt, image])  # ✅ Pass actual image, not dict
-    return response.text
+    try:
+        model = genai.GenerativeModel("models/gemini-2.5-flash")
+        response = model.generate_content([input_prompt, image])
+        return response.text
+    except Exception as e:
+        return f"⚠️ Error while generating response: {e}"
 
 # Function to process uploaded image
 def input_image_setup(uploaded_file):
     if uploaded_file is not None:
-        image = Image.open(uploaded_file)  # ✅ Convert file to PIL Image
-        return image  # ✅ Return the actual PIL image
+        image = Image.open(uploaded_file)
+        return image
     else:
-        raise FileNotFoundError("No file uploaded")
+        raise FileNotFoundError("No image uploaded")
 
-# Streamlit UI setup
-st.set_page_config(page_title="Calories Advisor App")
-st.header("Calories Advisor APP")
+# Streamlit Page Configuration
+st.set_page_config(page_title="Calories Advisor App", page_icon="🍎")
+st.title("🍎 Calories Advisor App")
+st.write("Upload a food image and get AI-based calorie and nutrition analysis.")
 
+# File uploader
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
     image = Image.open(uploaded_file)
-    st.image(image, caption="Uploaded image.", use_column_width=True)
+    st.image(image, caption="Uploaded Image", use_container_width=True)
 
-# Define input prompt
+# Nutritionist prompt
 input_prompt = """
 You are an expert nutritionist. Analyze the food items from the image, 
 calculate the total calories, and provide a breakdown as follows:
@@ -42,20 +47,21 @@ calculate the total calories, and provide a breakdown as follows:
 1. Item 1 - No of calories
 2. Item 2 - No of calories
 ---
-Finally, indicate whether the food is healthy or not. Also, provide a percentage 
-split of carbohydrates, fats, fibers, sugar, and other essential nutrients.
+Finally, indicate whether the food is healthy or not. 
+Also, provide a percentage split of carbohydrates, fats, fibers, sugar, and other essential nutrients.
 """
 
-submit = st.button('Tell me about the total calories')
-
-if submit:
+# Submit button
+if st.button("🔍 Analyze Image"):
     if uploaded_file:
-        try:
-            image_data = input_image_setup(uploaded_file)  # ✅ Now returns a PIL image
-            response = get_gemini_response(input_prompt, image_data)  # ✅ Correct format
-            st.header("The Response is")
-            st.write(response)
-        except Exception as e:
-            st.error(f"Error: {e}")
+        with st.spinner("Analyzing image... Please wait ⏳"):
+            try:
+                image_data = input_image_setup(uploaded_file)
+                response = get_gemini_response(input_prompt, image_data)
+                st.success("✅ Analysis Complete!")
+                st.subheader("AI Nutrition Report")
+                st.write(response)
+            except Exception as e:
+                st.error(f"❌ Error: {e}")
     else:
-        st.error("Please upload an image first.")
+        st.warning("⚠️ Please upload an image first.")
