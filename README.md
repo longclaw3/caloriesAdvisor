@@ -1,11 +1,11 @@
-# Calories Advisor 🍎
+# Calories Advisor 
 
 A simple Streamlit web app that helps users estimate calorie intake and get basic dietary suggestions using AI.
-![WhatsApp Image 2026-03-15 at 9 51 41 PM](https://github.com/user-attachments/assets/86814c1b-dab3-4ead-b0c0-37316c4b713d)
+
 
 ---
 
-## 🚀 Features
+##  Features
 
 * Enter food details to estimate calories
 * Get AI-based suggestions
@@ -13,7 +13,7 @@ A simple Streamlit web app that helps users estimate calorie intake and get basi
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 * Python
 * Streamlit
@@ -21,7 +21,7 @@ A simple Streamlit web app that helps users estimate calorie intake and get basi
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```
 caloriesAdvisor/
@@ -32,7 +32,7 @@ caloriesAdvisor/
 
 ---
 
-## ⚙️ Setup
+##  Setup
 
 1. Clone the repository
 
@@ -71,17 +71,11 @@ GOOGLE_API_KEY=your_api_key
 
 ---
 
-## ▶️ Run the App
+##  Run the App
 
 ```
 streamlit run app1.py
 ```
-
----
-
-## 🔐 Note
-
-Do not upload your `.env` file or API keys to GitHub.
 
 ---
 
